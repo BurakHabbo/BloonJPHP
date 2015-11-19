@@ -16,7 +16,8 @@ use php\lib\String;
 
 require('res://class/Autoloader.php');
 
-Autoloader::loadClass();
+$autoloader = new Autoloader;
+$autoloader->loadClass();
 
 $config = new Config;
 $network = new Network;
@@ -38,7 +39,7 @@ $cache = new CacheLoader($database);
 
 $events = array();
 
-Autoloader::loadEvents();
+$autoloader->loadEvents();
 
 Console::WriteLine("Loaded " . count($events) . " events !");
 $server = new ServerSocket();
@@ -50,11 +51,11 @@ $index = new IndexManager();
 Console::WriteLine("Server -> READY! (" . $config->get("game.tcp.bindip") . ":" . $config->get("game.tcp.port") . ")");
 
 $environment = new Environment();
-foreach (Autoloader::$class as $class) {
+foreach ($autoloader->getClassArray() as $class) {
     $environment->importClass($class);
 }
 
-foreach (Autoloader::$events as $event) {
+foreach ($autoloader->getEventsArray() as $event) {
     $environment->importClass($event);
 }
 

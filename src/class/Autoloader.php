@@ -8,21 +8,46 @@
  * https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
  */
 
+use php\lib\String;
+use php\io\File;
+
 Class Autoloader {
 
-    public static $class = array("CacheLoader", "Database", "DatabasePooling", "RC4", "PacketConstructor", "DiffieHellman", "EventManager", "BigInteger", "Network", "Util", "Config", "RSA", "HeaderManager", "Console", "ClassContainer", "IndexManager", "User", "BufferManager", "HabboEncoding", "PacketParser");
-    public static $events = array("CatalogEvents", "FriendEvents", "GameEvents", "GroupEvents", "HabboEvents", "HandshakeEvents", "HelpEvents", "InventoryEvents", "LandingEvents", "ModerationToolEvents", "NavigatorEvents", "OtherEvents", "PollEvents", "QuestEvents", "RoomBotEvents", "RoomEvents", "RoomItemEvents", "RoomWiredEvents", "UserRoomEvents");
+    private $class = array();
+    private $events = array();
 
-    public static function loadClass() {
-        foreach (self::$class as $class) {
+    public function __construct() {
+        $classFiles = new File('./src/class/');
+
+        foreach ($classFiles->findFiles() as $classFile) {
+            $this->class[] = String::replace($classFile->getName(), ".php", "");
+        }
+
+        $eventsFiles = new File('./src/events/');
+
+        foreach ($eventsFiles->findFiles() as $eventsFile) {
+            $this->events[] = String::replace($eventsFile->getName(), ".php", "");
+        }
+    }
+
+    public function loadClass() {
+        foreach ($this->class as $class) {
             require('res://class/' . $class . '.php');
         }
     }
 
-    public static function loadEvents() {
-        foreach (self::$events as $events) {
+    public function loadEvents() {
+        foreach ($this->events as $events) {
             require('res://events/' . $events . '.php');
         }
+    }
+
+    public function getClassArray() {
+        return $this->class;
+    }
+
+    public function getEventsArray() {
+        return $this->events;
     }
 
 }

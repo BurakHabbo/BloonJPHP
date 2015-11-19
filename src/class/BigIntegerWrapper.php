@@ -12,7 +12,7 @@ use php\lang\JavaClass;
 
 /* Unfinished, don't work. Alternative found. */
 
-Class BigInteger {
+Class BigIntegerWrapper {
 
     public $instance;
 
