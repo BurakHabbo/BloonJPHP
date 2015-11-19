@@ -15,16 +15,13 @@ dependencies {
     compile 'org.develnext:jphp-zend-ext:0.7.1' // legacy zend classes and functions
     compile 'org.develnext:jphp-json-ext:0.7.1' // json support
     compile 'org.develnext:jphp-xml-ext:0.7.1' // xml library
-    compile 'org.develnext:jphp-gdx-ext:0.7.1' // libgdx wrapper
-    compile 'org.develnext:jphp-jsoup-ext:0.7.1' // library for site parsing in jQuery style
     compile 'org.develnext:jphp-mail-ext:0.7.1' // for sending mail via smtp
     compile 'org.develnext:jphp-webserver-ext:0.7.1' // embedded http web server
     compile 'org.develnext:jphp-sql-ext:0.7.1' // for working with SQL databases, like PDO and JDBC
-    compile 'org.develnext:jphp-swing-ext:0.7.1' // GUI library based on Swing
 
     compile 'org.develnext:jphp-debugger:0.7.1' // JPHP debugger (xdebug)
     compile 'mysql:mysql-connector-java:5.1+' // MySQL connector
-	compile 'io.netty:netty:3.10+' // Netty
+    compile 'io.netty:netty:3.10+' // Netty
 }
 
 task wrapper(type: Wrapper) {
