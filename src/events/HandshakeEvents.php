@@ -1,11 +1,13 @@
 <?php
+
 /*
-* BloonJPHP
-* Habbo R63 Post-Shuffle
-* Based on the work of Burak (burak@burak.fr)
-*
-* https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
-*/
+ * BloonJPHP
+ * Habbo R63 Post-Shuffle
+ * Based on the work of Burak (burak@burak.fr)
+ *
+ * https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
+ */
+
 use php\io\Stream;
 use php\lib\String;
 
@@ -29,12 +31,12 @@ Class HandshakeEvents {
     }
 
     public static function InitCryptoMessageEvent(User $user, PacketParser $packet, ClassContainer $util) {
-        if($util->Config->Get("crypto.enabled")){
+        if ($util->Config->Get("crypto.enabled")) {
             $user->DH = new DiffieHellman;
 
-            if($util->Config->Get("crypto.DHstatic")){
+            if ($util->Config->Get("crypto.DHstatic")) {
                 $user->DH->GenerateDH($util->Config->Get("crypto.DHstaticPrime"), $util->Config->Get("crypto.DHstaticGenerator"));
-            }else{
+            } else {
                 $user->DH->GenerateDH();
             }
 
@@ -43,7 +45,7 @@ Class HandshakeEvents {
             $response->WriteString($util->RSA->Sign($user->DH->GetPrime()));
             $response->WriteString($util->RSA->Sign($user->DH->GetGenerator()));
             $user->Send($response->Finalize());
-        }else{
+        } else {
             $response = new PacketConstructor;
             $response->SetHeader($util->HeaderManager->Outgoing("InitCryptoMessageComposer"));
             $response->WriteString("Bloon");
@@ -53,7 +55,7 @@ Class HandshakeEvents {
     }
 
     public static function GenerateSecretKeyMessageEvent(User $user, PacketParser $packet, ClassContainer $util) {
-        if($util->Config->Get("crypto.enabled")){
+        if ($util->Config->Get("crypto.enabled")) {
             $rsadata = $packet->readString();
             $user->DH->GenerateSharedKey(String::Replace($util->RSA->Verify($rsadata), chr(0), ""));
 
@@ -68,7 +70,7 @@ Class HandshakeEvents {
             $user->rc4client->Init($user->DH->GetSharedKey(true));
             $user->rc4server->Init($user->DH->GetSharedKey(true));
             $user->rc4initialized = true;
-        }else{
+        } else {
             $response = new PacketConstructor;
             $response->SetHeader($util->HeaderManager->Outgoing("SecretKeyMessageComposer"));
             $response->WriteString("Crypto disabled");
@@ -126,7 +128,7 @@ Class HandshakeEvents {
             $response->WriteInt32($user->habbo['home_room']);
             $response->WriteInt32($user->habbo['home_room']);
             $user->Send($response->Finalize());
-            
+
             $response = new PacketConstructor;
             $response->SetHeader($util->HeaderManager->Outgoing("MinimailCountMessageComposer"));
             $response->WriteInt32(0);
