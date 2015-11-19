@@ -1,11 +1,12 @@
 <?php
+
 /*
-* BloonJPHP
-* Habbo R63 Post-Shuffle
-* Based on the work of Burak (burak@burak.fr)
-*
-* https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
-*/
+ * BloonJPHP
+ * Habbo R63 Post-Shuffle
+ * Based on the work of Burak (burak@burak.fr)
+ *
+ * https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
+ */
 
 Class HabboEncoding {
 
@@ -14,8 +15,8 @@ Class HabboEncoding {
         if (!isset($v[0]) || !isset($v[1])) {
             return -1;
         }
-        /*if ((ord($v[0]) | ord($v[1])) < 0)
-            return -1; NEED FIX */
+        /* if ((ord($v[0]) | ord($v[1])) < 0)
+          return -1; NEED FIX */
         return ((ord($v[0]) << 8) + (ord($v[1]) << 0));
     }
 
@@ -25,8 +26,8 @@ Class HabboEncoding {
             return -1;
         }
 
-        /*if ((ord($v[0]) | ord($v[1]) | ord($v[2]) | ord($v[3])) < 0)
-            return -1; NEED FIX */
+        /* if ((ord($v[0]) | ord($v[1]) | ord($v[2]) | ord($v[3])) < 0)
+          return -1; NEED FIX */
         return ((ord($v[0]) << 24) + (ord($v[1]) << 16) + (ord($v[2]) << 8) + (ord($v[3]) << 0));
     }
 

@@ -1,11 +1,13 @@
 <?php
+
 /*
-* BloonJPHP
-* Habbo R63 Post-Shuffle
-* Based on the work of Burak (burak@burak.fr)
-*
-* https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
-*/
+ * BloonJPHP
+ * Habbo R63 Post-Shuffle
+ * Based on the work of Burak (burak@burak.fr)
+ *
+ * https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
+ */
+
 use php\lib\String;
 
 Class Util {
@@ -86,7 +88,7 @@ Class Util {
         return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
     }
 
-    public static function ListPackage(){
+    public static function ListPackage() {
         foreach (get_loaded_extensions() as $ext) {
             $reflection = new ReflectionExtension($ext);
             foreach ($reflection->getClassNames() as $class) {

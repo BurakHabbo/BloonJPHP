@@ -1,11 +1,12 @@
 <?php
+
 /*
-* BloonJPHP
-* Habbo R63 Post-Shuffle
-* Based on the work of Burak (burak@burak.fr)
-*
-* https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
-*/
+ * BloonJPHP
+ * Habbo R63 Post-Shuffle
+ * Based on the work of Burak (burak@burak.fr)
+ *
+ * https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
+ */
 
 class EventManager {
 
@@ -15,7 +16,7 @@ class EventManager {
         $class = debug_backtrace()[1]['class'];
 
         if (method_exists($class, $event)) {
-        	$events[$headermanager->Incoming($event)] = Util::EventMethod($class, $event);
+            $events[$headermanager->Incoming($event)] = Util::EventMethod($class, $event);
         }
     }
 

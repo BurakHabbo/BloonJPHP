@@ -1,11 +1,13 @@
 <?php
+
 /*
-* BloonJPHP
-* Habbo R63 Post-Shuffle
-* Based on the work of Burak (burak@burak.fr)
-*
-* https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
-*/
+ * BloonJPHP
+ * Habbo R63 Post-Shuffle
+ * Based on the work of Burak (burak@burak.fr)
+ *
+ * https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
+ */
+
 use php\lib\String;
 
 Class RSA {
@@ -69,7 +71,7 @@ Class RSA {
         $ascii = array();
         $string_array = str_split($string);
 
-        for($i = 0; $i < count($string_array); $i++){
+        for ($i = 0; $i < count($string_array); $i++) {
             $char = ord($string_array[$i]);
             $ascii[$i] = $char;
         }
@@ -112,7 +114,7 @@ Class RSA {
         for ($x = 0; $x < $n; $x++) {
             $out[$x] = 0;
         }
-        
+
         $p = 0;
         $i = count($data) - 1;
         while ($i >= $p && $n > 11) {

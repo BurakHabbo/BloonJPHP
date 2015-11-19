@@ -1,11 +1,12 @@
 <?php
+
 /*
-* BloonJPHP
-* Habbo R63 Post-Shuffle
-* Based on the work of Burak (burak@burak.fr)
-*
-* https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
-*/
+ * BloonJPHP
+ * Habbo R63 Post-Shuffle
+ * Based on the work of Burak (burak@burak.fr)
+ *
+ * https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
+ */
 
 Class DiffieHellman {
 
@@ -17,21 +18,21 @@ Class DiffieHellman {
     var $SharedKey;
 
     public function GenerateDH($prime = "", $generator = "", $base = 10) {
-        if($prime != ""){
+        if ($prime != "") {
             $this->Prime = new BigInteger($prime, $base);
-        }else{
+        } else {
             $this->Prime = new BigInteger("114670925920269957593299136150366957983142588366300079186349531"); //TODO: generate random prime
         }
 
-        if($generator != ""){
+        if ($generator != "") {
             $this->Generator = new BigInteger($generator, $base);
-        }else{
+        } else {
             $this->Generator = new BigInteger("1589935137502239924254699078669119674538324391752663931735947"); //TODO: generate random generator
         }
 
         $this->PrivateKey = new BigInteger(Util::GenerateRandomHexString(30), 16);
 
-        if($this->Generator->compare($this->Prime) == 1){
+        if ($this->Generator->compare($this->Prime) == 1) {
             $temp = $this->Prime;
             $this->Prime = $this->Generator;
             $this->Generator = $temp;
