@@ -24,6 +24,7 @@ $network = new Network;
 $rsa = new RSA;
 $headermanager = new HeaderManager;
 $furnidataparser = new FurnidataParser;
+$webserverapi = new WebServerAPI;
 
 $headermanager->LoadHeader("PRODUCTION-201506161211-776084490");
 
@@ -53,6 +54,9 @@ $server->bind($config->get("game.tcp.bindip"), $config->get("game.tcp.port"));
 $service = ThreadPool::createFixed($config->get("game.tcp.conlimit"));
 
 $index = new IndexManager();
+
+if ($config->get("api.webserver.enabled"))
+    $webserverapi->start($config->get("api.webserver.port"));
 
 Console::WriteLine("Server -> READY! (" . $config->get("game.tcp.bindip") . ":" . $config->get("game.tcp.port") . ")");
 
