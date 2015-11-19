@@ -23,6 +23,7 @@ $config = new Config;
 $network = new Network;
 $rsa = new RSA;
 $headermanager = new HeaderManager;
+$furnidataparser = new FurnidataParser;
 
 $headermanager->LoadHeader("PRODUCTION-201506161211-776084490");
 
@@ -42,6 +43,11 @@ $events = array();
 $autoloader->loadEvents();
 
 Console::WriteLine("Loaded " . count($events) . " events !");
+
+$furnidataparser->setCache();
+
+Console::WriteLine("Loaded " . count($furnidataparser->floorItems) . " floor items and " . count($furnidataparser->wallItems) . " wall items !");
+
 $server = new ServerSocket();
 $server->bind($config->get("game.tcp.bindip"), $config->get("game.tcp.port"));
 $service = ThreadPool::createFixed($config->get("game.tcp.conlimit"));
