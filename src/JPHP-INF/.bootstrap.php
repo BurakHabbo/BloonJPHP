@@ -1,11 +1,13 @@
 <?php
+
 /*
-* BloonJPHP
-* Habbo R63 Post-Shuffle
-* Based on the work of Burak (burak@burak.fr)
-*
-* https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
-*/
+ * BloonJPHP
+ * Habbo R63 Post-Shuffle
+ * Based on the work of Burak (burak@burak.fr)
+ *
+ * https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
+ */
+
 use php\lang\ThreadPool;
 use php\io\IOException;
 use php\lang\Environment;
@@ -38,25 +40,25 @@ $events = array();
 
 Autoloader::loadEvents();
 
-Console::WriteLine("Loaded ".count($events)." events !");
+Console::WriteLine("Loaded " . count($events) . " events !");
 $server = new ServerSocket();
 $server->bind($config->get("game.tcp.bindip"), $config->get("game.tcp.port"));
 $service = ThreadPool::createFixed($config->get("game.tcp.conlimit"));
 
 $index = new IndexManager();
 
-Console::WriteLine("Server -> READY! (".$config->get("game.tcp.bindip").":".$config->get("game.tcp.port").")");
+Console::WriteLine("Server -> READY! (" . $config->get("game.tcp.bindip") . ":" . $config->get("game.tcp.port") . ")");
 
 $environment = new Environment();
-foreach(Autoloader::$class as $class){
+foreach (Autoloader::$class as $class) {
     $environment->importClass($class);
 }
 
-foreach(Autoloader::$events as $event){
+foreach (Autoloader::$events as $event) {
     $environment->importClass($event);
 }
 
-while(true){
+while (true) {
     $socket = $server->accept();
     $user = new User($socket, $socket->getAddress(), $socket->getPort());
     $index->socket[$user->socketid] = &$user;
@@ -69,15 +71,15 @@ while(true){
     $util->Cache = &$cache;
     $util->Config = &$config;
 
-    $service->execute (function () use ($user, $events, $util) {
+    $service->execute(function () use ($user, $events, $util) {
         ob_implicit_flush(true);
 
-        while($buffer = $user->socketInput->read(4096)){
+        while ($buffer = $user->socketInput->read(4096)) {
             if ($buffer == "<policy-file-request/>" . chr(0)) {
                 $user->send(Util::Crossdomain());
                 continue;
             }
-            
+
             $buffer = String::decode($buffer, 'ISO-8859-1');
 
             if ($user->rc4initialized) {
@@ -90,16 +92,14 @@ while(true){
                 $header = $packet->getHeader();
 
                 if (isset($events[$header])) {
-                    eval($events[$header]["parent"].'::'.$events[$header]["method"].'($user, $packet, $util);');
+                    eval($events[$header]["parent"] . '::' . $events[$header]["method"] . '($user, $packet, $util);');
                     Console::WriteLine("- Executed event for " . $header . " (" . $events[$header]["parent"] . '::' . $events[$header]["method"] . ") ");
-                }else{
+                } else {
                     Console::WriteLine("- Not found event for " . $header . " : " . $packet->getFullPacket());
                 }
             }
         }
-        
-        $user->disconnect();
-        
-    }, $environment);
 
+        $user->disconnect();
+    }, $environment);
 }
