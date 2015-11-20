@@ -42,7 +42,7 @@ class Room {
         $this->description = $data['description'];
         $this->category = (int) $data['category'];
         $this->state = 0; //$data['state']; //need int conversion here
-        $this->usersMax = (int) $data['usersMax'];
+        $this->usersMax = (int) $data['users_max'];
         $this->modelName = $data['model_name']; //need security check here
         $this->score = (int) $data['score'];
         $this->allowPets = $data['allow_pets'] == 1;
