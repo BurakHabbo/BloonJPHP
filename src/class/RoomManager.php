@@ -12,9 +12,11 @@ class RoomManager {
 
     private $rooms = array();
     private $database;
+    private $cache;
 
-    public function __construct(Database $database) {
+    public function __construct(Database $database, CacheLoader $cache) {
         $this->database = $database;
+        $this->cache = $cache;
     }
 
     public function getRoom($id) {
@@ -22,7 +24,7 @@ class RoomManager {
     }
 
     private function loadRoom($id) {
-        return $this->rooms[$id] = new Room($id, $this->database);
+        return $this->rooms[$id] = new Room($id, $this->database, $this->cache);
     }
 
     private function unloadRoom($id) {

@@ -8,6 +8,8 @@
  * https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
  */
 
+use php\lib\String;
+
 class RoomEvents {
 
     public function __construct() {
@@ -72,6 +74,36 @@ class RoomEvents {
         $response = new PacketConstructor;
         $response->SetHeader($util->HeaderManager->Outgoing("SendRoomCampaignFurnitureMessageComposer"));
         $response->WriteInt32(0);
+        $user->Send($response->Finalize());
+    }
+
+    public static function RoomGetHeightmapMessageEvent(User $user, PacketParser $packet, ClassContainer $util) {
+        $room = $user->currentLoadingRoom;
+        $model = $room->getModel();
+
+        $heightmap = String::replace($model['heightmap'], chr(0x0A), '');
+
+        $split = explode(chr(0x0D), $heightmap);
+
+        $sizeX = strlen($split[0]);
+        $sizeY = count($split);
+
+        $response = new PacketConstructor;
+        $response->SetHeader($util->HeaderManager->Outgoing("HeightMapMessageComposer"));
+        $response->WriteInt32($sizeX);
+        $response->WriteInt32($sizeX * $sizeY);
+
+        for ($i = 0; $i < $sizeY; $i++)
+            for ($j = 0; $j < $sizeX; $j++)
+                $response->WriteInt16(0 * 256);
+
+        $user->Send($response->Finalize());
+
+        $response = new PacketConstructor;
+        $response->SetHeader($util->HeaderManager->Outgoing("FloorMapMessageComposer"));
+        $response->WriteBoolean(true);
+        $response->WriteInt32(1); //wall height
+        $response->WriteString($heightmap . chr(0x0D));
         $user->Send($response->Finalize());
     }
 

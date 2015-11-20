@@ -33,7 +33,7 @@ class Room {
     private $group;
     private $event;
 
-    public function __construct($id, Database $database) {
+    public function __construct($id, Database $database, CacheLoader $cache) {
         $this->database = $database;
         $data = $this->database->Query("SELECT * FROM rooms WHERE id = ? LIMIT 1", array($id));
 
@@ -75,7 +75,7 @@ class Room {
 
         $this->rights = $this->database->Query("SELECT u.id,u.username FROM room_rights r, users u WHERE r.user_id = u.id AND r.room_id = ?", array($id));
 
-        foreach ($util->Cache->roommodels as $model) {
+        foreach ($cache->roommodels as $model) {
             if ($model['id'] == $this->modelName) {
                 $this->model = $model;
                 break;
@@ -97,6 +97,10 @@ class Room {
 
     public function getModelName() {
         return $this->modelName;
+    }
+
+    public function getModel() {
+        return $this->model;
     }
 
     public function getWallpaper() {
