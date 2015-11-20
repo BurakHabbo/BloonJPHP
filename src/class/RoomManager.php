@@ -88,7 +88,7 @@ class RoomManager {
     }
 
     public static function LoadRoomForUser(User $user, ClassContainer $util) {
-        $room = $this->currentLoadingRoom;
+        $room = $user->currentLoadingRoom;
 
         $response = new PacketConstructor;
         $response->SetHeader($util->HeaderManager->Outgoing("RoomGroupMessageComposer"));
