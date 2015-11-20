@@ -47,7 +47,7 @@ class RoomEvents {
         $id = $packet->readInt32();
         $password = $packet->readString();
 
-        Room::PrepareRoomForUser($user, $util, $id, $password);
+        $util->RoomManager->PrepareRoomForUser($user, $util, $id, $password);
     }
 
     public static function RoomGetInfoMessageEvent(User $user, PacketParser $packet, ClassContainer $util) {

@@ -23,6 +23,9 @@ class Room {
     private $modelName;
     private $score;
     private $allowPets;
+    private $wallpaper;
+    private $floor;
+    private $landscape;
     private $tags = array();
     private $rights = array();
     private $muted = false;
@@ -51,7 +54,7 @@ class Room {
         } else if ($data['state'] == "password") {
             $this->state = 2;
         }
-        
+
         $this->usersMax = (int) $data['users_max'];
         $this->modelName = $data['model_name']; //need security check here
         $this->score = (int) $data['score'];
@@ -82,6 +85,30 @@ class Room {
 
     public function getId() {
         return $this->id;
+    }
+
+    public function getModelName() {
+        return $this->modelName;
+    }
+
+    public function getWallpaper() {
+        return $this->wallpaper;
+    }
+
+    public function getFloor() {
+        return $this->floor;
+    }
+
+    public function getLandscape() {
+        return $this->landscape;
+    }
+
+    public function getScore() {
+        return $this->score;
+    }
+
+    public function getUsersMax() {
+        return $this->usersMax;
     }
 
     public function Serialize(PacketConstructor $response, $showEvents = false, $enterRoom = false) {
@@ -180,42 +207,6 @@ class Room {
         //Console::WriteLine($response->Finalize());
         $user->Send($response->Finalize());
         //}
-    }
-
-    public static function PrepareRoomForUser(User $user, ClassContainer $util, $id, $password, $isReload = false) {
-        if ($user->loadingRoom == $id || !is_array($user->habbo))
-            return;
-
-        $user->loadingRoom = $id;
-
-        if ($user->inRoom) {
-            //remove user from current room here
-            $user->currentRoom->leave();
-        }
-
-        $room = $util->RoomManager->getRoom($id);
-
-        if ($room == 0)
-            return;
-
-        if ($room->usersNow >= $room->usersMax && $user->habbo['id'] != $room->owner['id']) {
-            $response = new PacketConstructor;
-            $response->SetHeader($util->HeaderManager->Outgoing("RoomEnterErrorMessageComposer"));
-            $response->WriteInt32(1);
-            $user->Send($response->Finalize());
-
-            $response = new PacketConstructor;
-            $response->SetHeader($util->HeaderManager->Outgoing("OutOfRoomMessageComposer"));
-            $user->Send($response->Finalize());
-
-            $user->loadingRoom = 0;
-            $user->loadingChecksPassed = false;
-            return;
-        }
-
-        $user->currentLoadingRoom = $room;
-
-        //check room ban here
     }
 
 }
