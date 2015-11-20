@@ -21,6 +21,7 @@ class Room {
     private $usersNow = 0;
     private $usersMax = 50;
     private $modelName;
+    private $model = array();
     private $score;
     private $allowPets;
     private $wallpaper;
@@ -73,6 +74,13 @@ class Room {
         $this->owner['look'] = $owner['look'];
 
         $this->rights = $this->database->Query("SELECT u.id,u.username FROM room_rights r, users u WHERE r.user_id = u.id AND r.room_id = ?", array($id));
+
+        foreach ($util->Cache->roommodels as $model) {
+            if ($model['id'] == $this->modelName) {
+                $this->model = $model;
+                break;
+            }
+        }
     }
 
     public function getName() {
