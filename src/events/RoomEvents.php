@@ -43,6 +43,24 @@ class RoomEvents {
         EventManager::bind("VoteForRoomMessageEvent");
     }
 
+    public static function RoomGetInfoMessageEvent(User $user, PacketParser $packet, ClassContainer $util) {
+        $id = $packet->readInt32();
+        $num = $packet->readInt32();
+        $num2 = $packet->readInt32();
+
+        $room = $util->RoomManager->getRoom($id);
+
+        if ($num == 0 && $num2 == 1) {
+            $room->SerializeRoomInformation(false, $util, $user);
+            return;
+        } else if ($num == 0 && $num2 == 0) {
+            $room->SerializeRoomInformation(true, $util, $user);
+            return;
+        }
+
+        $room->SerializeRoomInformation(true, $util, $user);
+    }
+
 }
 
 new RoomEvents;

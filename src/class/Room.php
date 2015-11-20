@@ -24,6 +24,8 @@ class Room {
     private $score;
     private $allowPets;
     private $tags = array();
+    private $rights = array();
+    private $muted = false;
     private $group;
     private $event;
 
@@ -58,6 +60,8 @@ class Room {
         $this->owner['id'] = (int) $owner['id'];
         $this->owner['username'] = $owner['username'];
         $this->owner['look'] = $owner['look'];
+
+        $this->rights = $this->database->Query("SELECT u.id,u.username FROM room_rights r, users u WHERE r.user_id = u.id AND r.room_id = ?", array($id));
     }
 
     public function getName() {
@@ -123,6 +127,51 @@ class Room {
             $response->WriteString($this->event->getDescription());
             $response->WriteInt32(10); //floor($this->event->getExpireTime() - time() / 60);
         }
+    }
+
+    public function SerializeRoomInformation($show = false, ClassContainer $util, User $user) {
+        $this->SerializeRoomData($util, $user, false, false, $show); //$this->id != $user->currentRoomId
+
+        $response = new PacketConstructor;
+        $response->SetHeader($util->HeaderManager->Outgoing("LoadRoomRightsListMessageComposer"));
+        $response->WriteInt32($this->id);
+        $response->WriteInt32(count($this->rights));
+
+        foreach ($this->rights as $right) {
+            $response->WriteInt32($right['id']);
+            $response->WriteString($right['username']);
+        }
+        $user->Send($response->Finalize());
+    }
+
+    public function SerializeRoomData(ClassContainer $util, User $user, $isNotReload = false, $sendRoom = false, $show = true) {
+        $response = new PacketConstructor;
+        $response->SetHeader($util->HeaderManager->Outgoing("RoomDataMessageComposer"));
+        $response->WriteBoolean($show);
+        $this->Serialize($response, true, !$isNotReload);
+        $response->WriteBoolean($isNotReload);
+        $response->WriteBoolean(false); //public ?
+        $response->WriteBoolean(!$isNotReload);
+        $response->WriteBoolean($this->muted);
+        $response->WriteInt32(0); //whocanmute
+        $response->WriteInt32(0); //whocankick
+        $response->WriteInt32(0); //whocanban
+        $response->WriteBoolean(true); //room rights, need check here
+        $response->WriteInt32(0); //chat type
+        $response->WriteInt32(0); //chat balloon
+        $response->WriteInt32(0); //chat speed
+        $response->WriteInt32(14); //chat maxdistance
+        $response->WriteInt32(0); //chat flood protection
+
+        /* if ($sendRoom == null)
+          return; */
+
+        //if ($sendRoom) {
+        //$this->Send($response->Finalize());
+        //} else {
+        //Console::WriteLine($response->Finalize());
+        $user->Send($response->Finalize());
+        //}
     }
 
 }
