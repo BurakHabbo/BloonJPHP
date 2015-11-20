@@ -68,6 +68,13 @@ class RoomEvents {
         $room->SerializeRoomInformation(true, $util, $user);
     }
 
+    public static function RoomOnLoadMessageEvent(User $user, PacketParser $packet, ClassContainer $util) {
+        $response = new PacketConstructor;
+        $response->SetHeader($util->HeaderManager->Outgoing("SendRoomCampaignFurnitureMessageComposer"));
+        $response->WriteInt32(0);
+        $user->Send($response->Finalize());
+    }
+
 }
 
 new RoomEvents;
