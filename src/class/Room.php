@@ -43,7 +43,15 @@ class Room {
         $this->name = $data['caption'];
         $this->description = $data['description'];
         $this->category = (int) $data['category'];
-        $this->state = 0; //$data['state']; //need int conversion here
+
+        $this->state = 0;
+
+        if ($data['state'] == "closed") {
+            $this->state = 1;
+        } else if ($data['state'] == "password") {
+            $this->state = 2;
+        }
+        
         $this->usersMax = (int) $data['users_max'];
         $this->modelName = $data['model_name']; //need security check here
         $this->score = (int) $data['score'];
