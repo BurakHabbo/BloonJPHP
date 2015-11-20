@@ -39,6 +39,9 @@ $database->pool = &$pooling;
 
 $cache = new CacheLoader($database);
 $roommanager = new RoomManager($database);
+$roommanager->getRoom(16);
+$roommanager->getRoom(17);
+$roommanager->getRoom(18);
 
 $events = array();
 

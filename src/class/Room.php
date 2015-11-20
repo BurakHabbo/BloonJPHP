@@ -174,4 +174,40 @@ class Room {
         //}
     }
 
+    public static function PrepareRoomForUser(User $user, ClassContainer $util, $id, $password, $isReload = false) {
+        if ($user->loadingRoom == $id || !is_array($user->habbo))
+            return;
+
+        $user->loadingRoom = $id;
+
+        if ($user->inRoom) {
+            //remove user from current room here
+            $user->currentRoom->leave();
+        }
+
+        $room = $util->RoomManager->getRoom($id);
+
+        if ($room == 0)
+            return;
+
+        if ($room->usersNow >= $room->usersMax && $user->habbo['id'] != $room->owner['id']) {
+            $response = new PacketConstructor;
+            $response->SetHeader($util->HeaderManager->Outgoing("RoomEnterErrorMessageComposer"));
+            $response->WriteInt32(1);
+            $user->Send($response->Finalize());
+
+            $response = new PacketConstructor;
+            $response->SetHeader($util->HeaderManager->Outgoing("OutOfRoomMessageComposer"));
+            $user->Send($response->Finalize());
+
+            $user->loadingRoom = 0;
+            $user->loadingChecksPassed = false;
+            return;
+        }
+
+        $user->currentLoadingRoom = $room;
+
+        //check room ban here
+    }
+
 }

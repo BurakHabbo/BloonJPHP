@@ -27,6 +27,10 @@ class User {
     var $Prime;
     var $Generator;
     var $habbo;
+    public $loadingRoom = 0;
+    public $loadingChecksPassed = false;
+    public $inRoom = false;
+    public $currentLoadingRoom;
 
     public function __construct($socket, $ip, $port) {
         $this->socket = $socket;

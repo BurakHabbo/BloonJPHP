@@ -43,6 +43,13 @@ class RoomEvents {
         EventManager::bind("VoteForRoomMessageEvent");
     }
 
+    public static function EnterPrivateRoomMessageEvent(User $user, PacketParser $packet, ClassContainer $util) {
+        $id = $packet->readInt32();
+        $password = $packet->readString();
+
+        Room::PrepareRoomForUser($user, $util, $id, $password);
+    }
+
     public static function RoomGetInfoMessageEvent(User $user, PacketParser $packet, ClassContainer $util) {
         $id = $packet->readInt32();
         $num = $packet->readInt32();
