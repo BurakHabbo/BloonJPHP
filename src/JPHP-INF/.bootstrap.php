@@ -38,6 +38,8 @@ $database = new Database();
 $database->pool = &$pooling;
 
 $cache = new CacheLoader($database);
+$roommanager = new RoomManager($database);
+var_dump($roommanager->getRoom(11));
 
 $events = array();
 
@@ -81,6 +83,7 @@ while (true) {
     $util->Database = &$database;
     $util->Cache = &$cache;
     $util->Config = &$config;
+    $util->RoomManager = &$roommanager;
 
     $service->execute(function () use ($user, $events, $util) {
         ob_implicit_flush(true);

@@ -145,12 +145,14 @@ class NavigatorEvents {
         $response->SetHeader($util->HeaderManager->Outgoing("SearchResultSetComposer"));
         $response->WriteString($name);
         $response->WriteString($junk);
-        $response->WriteInt32(strlen($junk) > 0 ? 1 : $navigatorlength);
+        //$response->WriteInt32(strlen($junk) > 0 ? 1 : $navigatorlength);
 
         if (strlen($junk) > 0) {
+            $response->WriteInt32(strlen($junk) > 0 ? 1 : $navigatorlength);
             SearchResultList::SerializeSearches($junk, $response, $util);
         } else {
-            SearchResultList::SerializeSearchResultListStatics($name, true, $response, $util);
+            $response->WriteInt32(0);
+            //SearchResultList::SerializeSearchResultListStatics($name, true, $response, $util);
         }
 
         $user->Send($response->Finalize());

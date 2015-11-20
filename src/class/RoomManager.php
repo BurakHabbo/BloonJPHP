@@ -14,7 +14,7 @@ class RoomManager {
     private $database;
 
     public function __construct(Database $database) {
-        $this->database = $databse;
+        $this->database = $database;
     }
 
     public function getRoom($id) {
