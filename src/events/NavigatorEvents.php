@@ -74,7 +74,7 @@ class NavigatorEvents {
         $response->WriteInt32(4 + count($util->Cache->navigatorcategories));
 
         foreach ($util->Cache->navigatorcategories as $flatcat) {
-            $response->WriteString("category_" . $flatcat['caption']);
+            $response->WriteString("category__" . $flatcat['caption']);
         }
 
         $response->WriteString("recommended");
