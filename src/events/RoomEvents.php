@@ -105,6 +105,22 @@ class RoomEvents {
         $response->WriteInt32(1); //wall height
         $response->WriteString($heightmap . chr(0x0D));
         $user->Send($response->Finalize());
+
+        $response = new PacketConstructor;
+        $response->SetHeader($util->HeaderManager->Outgoing("RoomFloorItemsMessageComposer"));
+        $response->WriteInt32(1); //owner count
+        $response->WriteInt32($room->getOwner()['id']);
+        $response->WriteString($room->getOwner()['username']);
+        $response->WriteInt32(0); //items count
+        $user->Send($response->Finalize());
+
+        $response = new PacketConstructor;
+        $response->SetHeader($util->HeaderManager->Outgoing("RoomWallItemsMessageComposer"));
+        $response->WriteInt32(1); //owner count
+        $response->WriteInt32($room->getOwner()['id']);
+        $response->WriteString($room->getOwner()['username']);
+        $response->WriteInt32(0); //items count
+        $user->Send($response->Finalize());
     }
 
 }

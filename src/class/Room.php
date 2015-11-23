@@ -123,6 +123,10 @@ class Room {
         return $this->usersMax;
     }
 
+    public function getOwner() {
+        return $this->owner;
+    }
+
     public function Serialize(PacketConstructor $response, $showEvents = false, $enterRoom = false) {
         $response->WriteInt32($this->id);
         $response->WriteString($this->name);
