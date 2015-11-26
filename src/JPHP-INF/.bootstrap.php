@@ -24,11 +24,12 @@ $network = new Network;
 $rsa = new RSA;
 $headermanager = new HeaderManager;
 $furnidataparser = new FurnidataParser;
-$webserverapi = new WebServerAPI;
 
 $headermanager->LoadHeader("PRODUCTION-201506161211-776084490");
 
 $config->init("res://habbo.conf");
+
+$webserverapi = new WebServerAPI($config->get("api.webserver.token"), $config->get("api.webserver.token.allowed"), $config->get("api.webserver.whitelist"), $config->get("api.webserver.whitelist.ip"));
 
 $rsa->SetPrivate($config->get("crypto.rsaN"), $config->get("crypto.rsaE"), $config->get("crypto.rsaD"));
 
