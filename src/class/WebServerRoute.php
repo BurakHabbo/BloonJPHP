@@ -8,6 +8,8 @@
  * https://bloon.burak.fr/ - https://github.com/BurakDev/BloonJPHP
  */
 
+use php\util\Regex;
+
 class WebServerRoute {
 
     private $path;
@@ -19,7 +21,22 @@ class WebServerRoute {
     }
 
     public function match($url) {
-        return true;
+        /* Unfinished shit */
+
+        $url = trim($url, '/');
+        $regex = Regex::of('#:([\w]+)#');
+
+        $path = $regex->with($this->path)->replaceWithCallback(function(Regex $self) {
+            return '([^/]+)';
+        });
+
+        $reg = Regex::of("#^" . $path . "$#i");
+
+        foreach ($reg->with($url) as $match) {
+            var_dump($match);
+        }
+
+        return false;
     }
 
     public function call() {

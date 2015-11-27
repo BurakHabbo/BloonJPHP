@@ -50,6 +50,10 @@ class WebServerAPI {
                     echo "Root";
                 });
 
+                $router->get('/root/:name', function($name) {
+                    echo $name;
+                });
+
                 $router->run();
 
                 /* Some debug data */
