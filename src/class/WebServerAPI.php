@@ -23,6 +23,9 @@ class WebServerAPI {
 
     public function __construct($tokenEnabled = true, $token = "", $whitelistEnabled = true, $whitelist = "") {
         $this->server = new WebServer(function(WebRequest $req, WebResponse $res) {
+            require 'res://class/WebServerRouter.php';
+            require 'res://class/WebServerRoute.php';
+
             $current = WebServer::current();
             $drop = false;
 
@@ -40,20 +43,26 @@ class WebServerAPI {
                 $drop = true;
 
             if (!$drop) {
-                echo "Hello World!\n";
-                //TODO: Router, Controller, Render
+
+                $router = new WebServerRouter($req->servletPath, $req->method);
+
+                $router->get('/', function() {
+                    echo "Root";
+                });
+
+                $router->run();
 
                 /* Some debug data */
-                var_dump($req->method);
-                var_dump($req->scheme);
-                var_dump($req->pathInfo);
-                var_dump($req->servletPath);
-                var_dump($req->queryString);
-                var_dump($req->authType);
-                var_dump($req->url);
-                var_dump($req->port);
-                var_dump($req->ip);
-                var_dump($req->cookies);
+                /* var_dump($req->method);
+                  var_dump($req->scheme);
+                  var_dump($req->pathInfo);
+                  var_dump($req->servletPath);
+                  var_dump($req->queryString);
+                  var_dump($req->authType);
+                  var_dump($req->url);
+                  var_dump($req->port);
+                  var_dump($req->ip);
+                  var_dump($req->cookies); */
             } else {
                 $res->status = 403;
                 echo "Access denied";
